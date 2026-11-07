@@ -1,0 +1,9 @@
+raw/
+*.nc
+*.part
+__pycache__/
+# never add ITU digital products (e.g. N050.TXT): ITU forbids reproduction without written permission
+N050.TXT
+DN50.TXT
+LAT.TXT
+LON.TXT

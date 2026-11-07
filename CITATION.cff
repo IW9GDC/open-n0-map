@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this map, please cite it as below."
+title: "Open N0: a free world map of sea-level surface refractivity"
+authors:
+  - name: "Emanuele IW9GDC"
+type: dataset
+license: MIT
+repository-code: "https://github.com/IW9GDC/open-n0-map"
+date-released: "2026-11-07"
+version: "1.0.0"
+keywords: [radio propagation, refractivity, ITM, Longley-Rice, ITU-R P.453, reanalysis]
+references:
+  - type: article
+    title: "NCEP-DOE AMIP-II Reanalysis (R-2)"
+    authors: [{family-names: Kanamitsu, given-names: M.}]
+    journal: "Bulletin of the American Meteorological Society"
+    volume: 83
+    issue: 11
+    year: 2002
+    doi: "10.1175/BAMS-83-11-1631"
