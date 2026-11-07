@@ -76,3 +76,40 @@ Values suggested by the ITM guide (NTIA Report 82-100; surface values of a 1960s
 | Singapore | 391 | 387 | 390 |
 | Tromsø | 316 | 311 | 329 |
 | Denver | 314 | 311 | 334 |
+
+## Change between 1991-2000 and 2011-2020
+
+From `tools/decades_n0.py`: annual median N0 of each decade (same data and physics as the map), and the change of the
+mean dry term (77.6 (P − e)/T) and wet term (72 e/T + 3.75·10⁵ e/T²), all reduced to sea level. The two decades are
+20 years apart.
+
+| | Change |
+|---|---|
+| 2 m temperature | +0.47 K |
+| Water vapour pressure | +0.44 hPa (+2.6 %) |
+| Dry term | −0.58 N-units |
+| Wet term | +1.91 N-units |
+| **N0 (median)** | **+1.26 N-units** (area-weighted; 62 % of the grid points increased) |
+
+Warming lowers the dry term (about −1 N-unit per kelvin) and raises the wet term through the extra water vapour;
+the vapour wins, so N0 increases. At constant relative humidity +0.47 K would give about +3.3 % of vapour
+(Clausius-Clapeyron); +2.6 % is consistent with a slight drop of relative humidity over land.
+
+| Latitude band | ΔN0 | dry | wet | ΔT (K) |
+|---|---|---|---|---|
+| +60° to +90° | +0.0 | −2.3 | +2.2 | +1.86 |
+| +30° to +60° | +1.3 | −0.5 | +2.1 | +0.48 |
+| 0° to +30° | +2.6 | −0.5 | +3.1 | +0.34 |
+| −30° to 0° | +1.2 | −0.3 | +1.6 | +0.27 |
+| −60° to −30° | +0.7 | −0.3 | +1.1 | +0.31 |
+| −90° to −60° | −0.8 | −1.2 | +0.3 | +0.88 |
+
+The Arctic warmed four times the global mean, but with so little vapour the two terms cancel. In dry regions the
+change can be negative (Sahara −0.3, Denver −2.1); in humid ones it is largest (Delhi +5.0, Messina +2.8).
+
+The trend, about +0.06 N-units per year worldwide and +0.13 between the equator and 30° N, accounts for roughly half of
+the difference from the ITU-R P.452 `N050` map, whose radiosonde data (1983-1992) are about 17 years older than the
+centre of this map's period: about +1.1 worldwide and +2.3 in the northern tropics, against +2.0 and +3.3 observed.
+The rest comes from the instruments (radiosonde humidity sensors against a reanalysis), the observing times and the
+station coverage. Trends in a reanalysis also carry changes of the observing system: take the order of magnitude,
+not the decimals.

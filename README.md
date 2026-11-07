@@ -89,6 +89,7 @@ https://psl.noaa.gov.* The data are a work of the U.S. Government and in the pub
 | `tools/fetch_r2.sh` | downloads the Reanalysis 2 files (about 5.3 GB, resumable) |
 | `tools/build_n0.py` | builds the map |
 | `tools/compare_n0.py` | prints the checks of [Validation](#validation) |
+| `tools/decades_n0.py` | change of N0 (and of its dry and wet terms) between 1991-2000 and 2011-2020 |
 | `js/n0.js` | reader for browsers and Node (bilinear) |
 
 ## Use
@@ -132,6 +133,9 @@ Details and tables in [validation/VALIDATION.md](validation/VALIDATION.md).
   3000 m). It depends on the convention of the reduction to sea level: with h0 = 7.35 km (the global mean of P.453)
   instead of 9.46 km it reverses sign (+15 above 3000 m). This map keeps 9.46 km on purpose, to match ITM. The coarse
   model orography of the reanalysis also smooths valleys and plateaus.
+- **Climate**: between 1991-2000 and 2011-2020 the median N0 rose by 1.3 N-units worldwide (+2.6 between the equator
+  and 30° N): warming lowers the dry term, the extra water vapour raises the wet term more. This accounts for about half
+  of the difference from the older ITU map.
 - **Against the monthly maps of ITU-R P.453** (Figs 1 and 2, February and August): the same latitude pattern and
   seasonal swing, within about 10-20 N-units of the values read on the charts.
 - **ITM climate classes**: the map is higher than the values suggested by the ITM guide in most classes (for example
