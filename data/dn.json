@@ -1,0 +1,21 @@
+{
+ "quantity": "radio-refractivity lapse rate through the lowest 1 km of the atmosphere, DN = N(surface) - N(surface + 1 km), N-units/km, median (exceeded for 50 % of the time): the quantity of the ITU-R P.452/P.1812 map DN50",
+ "layers": [
+  "annual"
+ ],
+ "rows": 121,
+ "cols": 241,
+ "lat0": 90.0,
+ "lon0": 0.0,
+ "step": 1.5,
+ "scale": 0.1,
+ "type": "uint16 little-endian",
+ "source": "NCEP-DOE Reanalysis 2 (NOAA PSL, public domain): 2 m T and q, surface pressure, and pressure-level T and RH, 6-hourly 1991-2020",
+ "method": "ITU-R P.453 eq. (6) at the surface and at 1 km above it (hypsometric heights, ln N interpolated); median per grid cell; bilinear to 1.5 degrees",
+ "built": "2026-11-08",
+ "license": "MIT (Open N0); input data public domain",
+ "files": {
+  "dn.bin": "1 layer uint16 little-endian (DN x 10), 121 rows (lat +90 to -90) x 241 columns (lon 0 to 360)",
+  "DN_annual.txt": "the same grid as text, one row per latitude, N-units/km with one decimal"
+ }
+}

@@ -1,4 +1,4 @@
-# Open N0: a free world map of sea-level surface refractivity
+# Open N0: free world maps of sea-level surface refractivity N0 and of its lapse rate ΔN
 
 A world map of **N0**, the radio refractivity of the air at the surface reduced to sea level, for the whole year and
 for each month, built only from public-domain data with the physics of the open literature, and released under the
@@ -16,6 +16,10 @@ for each month, built only from public-domain data with the physics of the open 
 It is used by [RFscape](https://rfscape.com/), a free radio coverage planner, to suggest the value of this parameter
 for the place and the month of a link or a coverage map.
 
+Since version 1.1.0 (08/11/2026) the repository also holds a second map built the same way: **ΔN**, the refractivity
+lapse rate through the lowest kilometre of the atmosphere, the quantity of the ITU-R P.452 / P.1812 map `DN50`. See
+[ΔN, the refractivity lapse rate](#δn-the-refractivity-lapse-rate).
+
 ## What it is for
 
 Radio propagation models need the refractivity of the air near the ground:
@@ -23,7 +27,8 @@ Radio propagation models need the refractivity of the air near the ground:
 - **ITM / Longley-Rice** takes it as an input (`N_0`) and uses it for the effective earth radius and for the
   diffraction and troposcatter loss. Most programs leave it at **301**, the value for a continental temperate climate
   in the United States.
-- **ITU-R P.452 and P.1812** use N0 in their troposcatter models.
+- **ITU-R P.452 and P.1812** use N0 in their troposcatter models, and **ΔN** for the median effective earth radius
+  (k50 = 157 / (157 − ΔN)) on which their whole diffraction and path analysis rests.
 - The **effective earth factor k** and the **radio horizon** follow from it: from a 1000 m site the radio horizon is
   130 km with N = 301 and 150 km with N = 400.
 
@@ -91,6 +96,12 @@ https://psl.noaa.gov.* The data are a work of the U.S. Government and in the pub
 | `tools/compare_n0.py` | prints the checks of [Validation](#validation) |
 | `tools/decades_n0.py` | change of N0 (and of its dry and wet terms) between 1991-2000 and 2011-2020 |
 | `js/n0.js` | reader for browsers and Node (bilinear) |
+| `data/dn.bin` | ΔN, 1 layer 121 × 241, `uint16` little-endian = ΔN × 10, same layout as `n0.bin`. 58 KB |
+| `data/DN_annual.txt`, `data/dn.json` | the same grid as text (N-units/km, one decimal), layout and provenance |
+| `data/dn_r2_1991-2020.npz` | median, mean and standard deviation of ΔN, also on the 2.5° grid of the pressure levels |
+| `tools/fetch_r2_levels.sh` | downloads the Reanalysis 2 pressure-level temperature and humidity (about 15 GB, resumable) |
+| `tools/build_dn.py`, `tools/compare_dn.py` | build the ΔN map; difference statistics against your own copy of `DN50.TXT` |
+| `js/dn.js` | ΔN reader for browsers and Node (bilinear) |
 
 ## Use
 
@@ -157,6 +168,9 @@ Details and tables in [validation/VALIDATION.md](validation/VALIDATION.md).
 tools/fetch_r2.sh raw                      # about 5.3 GB from psl.noaa.gov
 python3 tools/build_n0.py raw data         # about 10 minutes, 3 GB of memory
 python3 tools/compare_n0.py data/n0_r2_1991-2020.npz [--itu path/to/your/own/N050.TXT]
+tools/fetch_r2_levels.sh raw-levels        # about 15 GB from psl.noaa.gov (for ΔN)
+python3 tools/build_dn.py raw raw-levels data       # about 30 minutes, 6 GB of memory
+python3 tools/compare_dn.py data/dn_r2_1991-2020.npz --itu path/to/your/own/DN50.TXT
 ```
 
 Python 3 with `numpy` and `netCDF4`.
@@ -181,6 +195,44 @@ Python 3 with `numpy` and `netCDF4`.
   prediction mode*, NTIA Report 82-100, 1982 (suggested values per climate).
 - M. Kanamitsu, W. Ebisuzaki, J. Woollen, S.-K. Yang, J. J. Hnilo, M. Fiorino, G. L. Potter, *NCEP-DOE AMIP-II
   Reanalysis (R-2)*, Bull. Amer. Meteor. Soc. 83 (11), 1631-1643, 2002. doi:10.1175/BAMS-83-11-1631
+
+## ΔN, the refractivity lapse rate
+
+| | |
+|---|---|
+| Quantity | ΔN = N(surface) − N(surface + 1 km), N-units/km, positive, **median** (exceeded for 50 % of the time) |
+| Period | 1991-2020, every 6 hours |
+| Grid | 1.5°, the layout of the ITU-R P.452 / P.1812 maps (121 × 241), one layer (the year) |
+| Source data | NCEP-DOE Reanalysis 2: the surface fields above, plus air temperature and relative humidity on the pressure levels from 1000 to 300 hPa |
+| Licence | MIT |
+
+**Physics.** At the surface N comes from the 2 m temperature and humidity and the surface pressure, as for N0. On the
+pressure levels the water vapour pressure is e = RH/100 · EF · 6.1121 exp((18.678 − t/234.5) t / (t + 257.14))
+(ITU-R P.453-14 eqs. 9-10, over water, t in °C, EF = 1 + 10⁻⁴ (7.2 + P (0.0320 + 5.9·10⁻⁶ t²))). The heights of the
+levels come from the hypsometric equation upward from the ground, z₂ = z₁ + (Rd/g) T̄v ln(p₁/p₂), with the virtual
+temperature Tv = T (1 + 0.608 q); only levels above the ground are used. N at 1 km above the ground is interpolated
+linearly in ln N between the two points around it. The median per grid point is taken from a histogram of 0.05 N-unit
+bins, then the 2.5° field is interpolated bilinearly to the 1.5° grid.
+
+**Validation** (details in [validation/VALIDATION.md](validation/VALIDATION.md)). Against the ITU `DN50` map
+(radiosondes 1983-1992; only differences are given): area-weighted mean difference **+2.7 N-units/km**, rms 7.1; +0.8 to
++2.7 at mid and high northern latitudes, +4.5 to +5.3 in the tropics, −2.7 to −5.1 over ground above 1500 m. Used in
+ITU-R P.1812 on 53,467 paths of the ITU-R SG3 measurement databank, it gives the same predictions as the ITU map: mean
+error and standard deviation differ by 0.1 dB at most.
+
+```python
+import numpy as np
+dn = np.fromfile('data/dn.bin', '<u2').reshape(121, 241) / 10.0   # same bilinear lookup as n0_at above
+```
+
+```js
+import { dnAt } from './js/dn.js';
+const london = await dnAt('data/dn.bin', 51.5, -0.1);   // about 43 N-units/km
+```
+
+**Limitations.** A reanalysis smooths the thin inversions that radiosondes see in the lowest hundreds of metres, and
+its orography is coarse: values over complex terrain and near coasts are regional. ΔN describes the median bending;
+ducting and anomalous propagation need the statistics of the gradient (β0 in P.452 / P.1812), not this map.
 
 ## Licence and citation
 

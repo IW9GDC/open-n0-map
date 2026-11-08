@@ -113,3 +113,44 @@ centre of this map's period: about +1.1 worldwide and +2.3 in the northern tropi
 The rest comes from the instruments (radiosonde humidity sensors against a reanalysis), the observing times and the
 station coverage. Trends in a reanalysis also carry changes of the observing system: take the order of magnitude,
 not the decimals.
+
+## ΔN against ITU-R P.452 / P.1812 DN50
+
+From `tools/compare_dn.py` and the build of 08/11/2026 (median map; only differences, this map minus ITU, are given).
+
+- area-weighted mean difference **+2.7** N-units/km, rms **7.1**
+
+| Latitude band | mean difference | rms |
+|---|---|---|
+| +60° to +90° | +0.8 | 2.4 |
+| +30° to +60° | +2.7 | 5.6 |
+| +0° to +30° | +5.3 | 9.9 |
+| -30° to +0° | +4.5 | 8.0 |
+| -60° to -30° | -0.9 | 3.7 |
+| -90° to -60° | -1.5 | 3.1 |
+
+| Ground height | grid points | mean difference | rms |
+|---|---|---|---|
+| below 500 m | 23379 | +3.1 | 7.0 |
+| 500-1500 m | 2947 | +1.8 | 7.8 |
+| 1500-3000 m | 2059 | -2.7 | 5.4 |
+| above 3000 m | 776 | -5.1 | 6.9 |
+
+The mean of ΔN (instead of the median) is about 1 N-unit/km higher everywhere. A single year (1991) already gives
++2.9 / rms 7.3, so the differences are not a matter of sample size: the likely causes are the different period, the
+different source (reanalysis against radiosondes, which see thin low-level inversions) and the coarse orography.
+
+### In use: ITU-R P.1812 on the ITU-R SG3 databank
+
+The reference implementation of Recommendation ITU-R P.1812-8 was run on 53,467 paths of the ITU-R Study Group 3
+databank of VHF/UHF measurements, once with the ITU maps (DN50, N050) and once with this repository's maps (ΔN, and the
+annual N0). Error = predicted minus measured field strength:
+
+| Case | ITU maps: mean / sd | Open maps: mean / sd |
+|---|---|---|
+| transmitter at 50 m or more, receiver at 8 m or more (35,650) | +5.7 / 8.5 dB | +5.7 / 8.5 dB |
+| low transmitting antennas (10,154) | +12.8 / 13.9 dB | +13.1 / 13.9 dB |
+| all (53,352) | +7.3 / 10.3 dB | +7.4 / 10.3 dB |
+
+For a propagation prediction the two maps are interchangeable.
+
